@@ -1,8 +1,13 @@
+import Banner from "../Banner/Banner";
+import "../../../src/App.css"
+
 
 const Homepage = () => {
   return (
-    <div>Homepage</div>
-  )
-}
+    <>
+      <Banner />
+    </>
+  );
+};
 
 export default Homepage;

@@ -10,3 +10,10 @@
 a{
     text-decoration: none;
 }
+
+.banner{
+    background-image: url("./assets/banner2.jpg");
+    height: 50vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
