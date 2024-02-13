@@ -1,6 +1,5 @@
 import "../../../src/App.css";
-import Carousell from "./Carousell";
-
+import Carousell from "../Banner/Carousell"
 
 
 const Banner = () => {
@@ -11,7 +10,7 @@ const Banner = () => {
             
             <Carousell/>
         </div>
-        
+    
     );
     };
 
