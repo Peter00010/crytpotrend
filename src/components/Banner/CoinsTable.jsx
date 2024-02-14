@@ -6,7 +6,9 @@ import { CryptoState } from "../../CryptoContext";
 export default function CoinsTable() {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState(""); 
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [coinsPerPage] = useState(10);
   const { currency, symbol } = CryptoState();
 
   const fetchCoins = async () => {
@@ -25,6 +27,21 @@ export default function CoinsTable() {
     fetchCoins();
   }, [currency]);
 
+  const indexOfLastCoin = currentPage * coinsPerPage;
+  const indexOfFirstCoin = indexOfLastCoin - coinsPerPage;
+  const currentCoins = coins.slice(indexOfFirstCoin, indexOfLastCoin);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleSearch = () => {
+    return currentCoins.filter((coin) =>
+      coin.name.toLowerCase().includes(search.toLowerCase()) ||
+      coin.symbol.toLowerCase().includes(search.toLowerCase())
+    );
+  };
+
+  const filteredCoins = search ? handleSearch() : currentCoins;
+
   return (
     <div className="container mx-auto text-center">
       <h1 className="text-4xl font-semibold my-8">Cryptocurrency Prices by Market Cap</h1>
@@ -33,6 +50,7 @@ export default function CoinsTable() {
           type="text"
           className="border border-gray-300 rounded p-2 w-full"
           placeholder="Search For a Crypto Currency.."
+          value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
@@ -44,14 +62,14 @@ export default function CoinsTable() {
         <table className="w-full">
           <thead>
             <tr className="bg-purple-500">
-              <th className="py-2">Coin</th>
-              <th className="py-2">Price</th>
-              <th className="py-2">24h Change</th>
-              <th className="py-2">Market Cap</th>
+              <th className="py-2 bg-purple-500 text-black">Coin</th>
+              <th className="py-2 bg-purple-500 text-black">Price</th>
+              <th className="py-2 bg-purple-500 text-black">24h Change</th>
+              <th className="py-2 bg-purple-500 text-black">Market Cap</th>
             </tr>
           </thead>
           <tbody>
-            {coins.map((coin) => (
+            {filteredCoins.map((coin) => (
               <tr
                 key={coin.id}
                 onClick={() => history.push(`/coins/${coin.id}`)}
@@ -63,7 +81,7 @@ export default function CoinsTable() {
                     alt={coin.name}
                     className="w-10 h-10"
                   />
-                  <div className="mb-3">
+                  <div className="mb-5">
                     <span className="text-lg font-semibold uppercase">{coin.symbol}</span>
                     <br />
                     <span className="text-gray-500">{coin.name}</span>
@@ -80,8 +98,17 @@ export default function CoinsTable() {
           </tbody>
         </table>
       )}
-      {/* Pagination */}
-      {/* You can implement pagination here */}
+      <div className="mt-12 mb-5">
+        {Array.from({ length: Math.ceil(coins.length / coinsPerPage) }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => paginate(i + 1)}
+            className={`px-3 py-1 mx-1 rounded-lg ${currentPage === i + 1 ? 'bg-purple-600 text-white' : 'bg-purple-200 text-gray-800 hover:bg-purple-400 hover:text-white'}`}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
