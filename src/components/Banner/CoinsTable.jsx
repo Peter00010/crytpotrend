@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { CoinList } from "../../Config/api";
 import { CryptoState } from "../../CryptoContext";
+// import { useHistory } from "react-router-dom";
 
 export default function CoinsTable() {
   const [coins, setCoins] = useState([]);
@@ -10,6 +12,7 @@ export default function CoinsTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [coinsPerPage] = useState(10);
   const { currency, symbol } = CryptoState();
+  // const history = useHistory();
 
   const fetchCoins = async () => {
     setLoading(true);
@@ -44,7 +47,7 @@ export default function CoinsTable() {
 
   return (
     <div className="container mx-auto text-center">
-      <h1 className="text-4xl font-semibold my-8">Cryptocurrency Prices by Market Cap</h1>
+      <h1 className="text-2xl md:text-4xl font-semibold my-8">Cryptocurrency Prices by Market Cap</h1>
       <div className="mb-8 w-full">
         <input
           type="text"
@@ -62,7 +65,7 @@ export default function CoinsTable() {
         <table className="w-full">
           <thead>
             <tr className="bg-purple-500">
-              <th className="py-2 bg-purple-500 text-black">Coin</th>
+              <th className="bg-purple-500 text-black">Coin</th>
               <th className="py-2 bg-purple-500 text-black">Price</th>
               <th className="py-2 bg-purple-500 text-black">24h Change</th>
               <th className="py-2 bg-purple-500 text-black">Market Cap</th>
@@ -76,7 +79,7 @@ export default function CoinsTable() {
                 className="cursor-pointer hover:bg-gray-800"
               >
                 <td className="flex items-center gap-3">
-                  <img
+                  <img 
                     src={coin.image}
                     alt={coin.name}
                     className="w-10 h-10"
