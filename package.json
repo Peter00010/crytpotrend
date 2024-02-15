@@ -2,9 +2,11 @@
   "name": "crypto_trend",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://github.io/crypto_trend",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "deploy": "gh-pages -d build",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
