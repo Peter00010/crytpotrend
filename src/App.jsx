@@ -5,9 +5,10 @@ import Coinpage from "./components/Pages/Coinpage";
 import Header from "./components/Header";
 
 const App = () => {
+    
     return (
         <BrowserRouter>
-        <Header/>
+        <Header/> 
             <Routes>
                 <Route path="/" element={<Homepage />}  exact/>
                 <Route path="/coins/:id" element={<Coinpage />} />

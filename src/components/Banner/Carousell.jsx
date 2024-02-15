@@ -11,13 +11,20 @@ const Carousel = () => {
 
   const fetchTrendingCoins = async () => {
     try {
-      const response = await fetch(TrendingCoins(currency));
-      const data = await response.json();
-      setTrending(data);
+      const cachedData = localStorage.getItem('trendingCoinsData');
+      if (cachedData) {
+        setTrending(JSON.parse(cachedData));
+      } else {
+        const response = await fetch(TrendingCoins(currency));
+        const data = await response.json();
+        setTrending(data);
+        localStorage.setItem('trendingCoinsData', JSON.stringify(data));
+      }
     } catch (error) {
       console.error("Error fetching trending coins:", error);
     }
   };
+  
 
   useEffect(() => {
     fetchTrendingCoins();

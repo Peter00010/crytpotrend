@@ -1,9 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { CoinList } from "../../Config/api";
 import { CryptoState } from "../../CryptoContext";
-// import { useHistory } from "react-router-dom";
 
 export default function CoinsTable() {
   const [coins, setCoins] = useState([]);
@@ -12,14 +10,19 @@ export default function CoinsTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [coinsPerPage] = useState(10);
   const { currency, symbol } = CryptoState();
-  // const history = useHistory();
 
   const fetchCoins = async () => {
     setLoading(true);
     try {
-      const response = await fetch(CoinList(currency));
-      const data = await response.json();
-      setCoins(data);
+      const cachedData = localStorage.getItem('coinsData');
+      if (cachedData) {
+        setCoins(JSON.parse(cachedData));
+      } else {
+        const response = await fetch(CoinList(currency));
+        const data = await response.json();
+        setCoins(data);
+        localStorage.setItem('coinsData', JSON.stringify(data));
+      }
     } catch (error) {
       console.error("Error fetching coins:", error);
     }
@@ -75,20 +78,24 @@ export default function CoinsTable() {
             {filteredCoins.map((coin) => (
               <tr
                 key={coin.id}
-                onClick={() => history.push(`/coins/${coin.id}`)}
                 className="cursor-pointer hover:bg-gray-800"
               >
-                <td className="flex items-center gap-3">
-                  <img 
-                    src={coin.image}
-                    alt={coin.name}
-                    className="w-10 h-10"
-                  />
-                  <div className="mb-5">
-                    <span className="text-lg font-semibold uppercase">{coin.symbol}</span>
-                    <br />
-                    <span className="text-gray-500">{coin.name}</span>
-                  </div>
+                <td>
+                  <Link
+                    to={`/coins/${coin.id}`}
+                    className="flex items-center gap-3"
+                  >
+                    <img 
+                      src={coin.image}
+                      alt={coin.name}
+                      className="w-10 h-10"
+                    />
+                    <div className="mb-5">
+                      <span className="text-lg font-semibold uppercase">{coin.symbol}</span>
+                      <br />
+                      <span className="text-gray-500">{coin.name}</span>
+                    </div>
+                  </Link>
                 </td>
                 <td>{symbol} {coin.current_price.toFixed(2)}</td>
                 <td className={coin.price_change_percentage_24h > 0 ? "text-green-500 font-semibold" : "text-red-500 font-semibold"}>
